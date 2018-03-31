@@ -19,6 +19,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to create hash cache: %q\n", err.Error())
 	}
-	err = http.ListenAndServe(h, dcdn.FileServer{HashCache: hc})
-	log.Fatalf("Server terminated with error %q\n", err.Error())
+	errch := make(chan error)
+	go func() {
+		errch <- http.ListenAndServe(h, dcdn.FileServer{HashCache: hc})
+	}()
+	log.Printf("Serving on %q\n", h)
+	log.Fatalf("http.ListenAndServe crashed: %q\n", (<-errch).Error())
 }

@@ -138,8 +138,8 @@ func main() {
 		}
 
 		var resp struct {
-			Ok     bool
-			ErrMsg string
+			Ok     bool   `json:"ok"`
+			ErrMsg string `json:"err"`
 		}
 		//parse URL
 		surl, err := url.Parse(server)
